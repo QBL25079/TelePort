@@ -2,9 +2,6 @@ package main
 
 import (
 	"context"
-	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/QBL25079/TelePort/vpn-bot/internal/config"
 	"github.com/QBL25079/TelePort/vpn-bot/internal/delivery/telegram"
@@ -33,22 +30,15 @@ func main() {
 	defer db.Close()
 
 	userRepo := postgres.NewUserRepo(db)
-	registration := usecase.NewRegistration(userRepo)
-	state := postgres.NewStateRepo(db)
+	subRepo := postgres.NewSubscriptions(db)
+	stateRepo := postgres.NewStateRepo(db)
 
+	registration := usecase.NewRegistration(userRepo)
+	subscription := usecase.NewSubscription(subRepo, userRepo)
 	bot, err := telegram.NewBot(cfg, log, registration, state)
+	if err != nil {
+		log.Fatal("failed to create bot: %w", zap.Error(err))
+	}
 	bot.Setup()
 
-	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer cancel()
-
-	go func() {
-		bot.Start(ctx)
-	}()
-
-	log.Info("bot is running...")
-	<-ctx.Done()
-
-	log.Info("shutting down...")
-	bot.Stop()
 }

@@ -20,7 +20,7 @@ func NewUserRepo(db *pgxpool.Pool) *UserRepo {
 }
 
 func (r *UserRepo) Create(ctx context.Context, user *domain.User) error{
-	query := `INSERT INTO users (telegram_id, username, first_name, is_admin, created_at)
+	query := `INSERT INTO users (telegram_id, username, first_name, last_name is_admin, created_at)
 		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id, created_at`
 
@@ -28,13 +28,14 @@ func (r *UserRepo) Create(ctx context.Context, user *domain.User) error{
 		user.TelegramID,
 		user.UserName,
 		user.FirstName,
+		user.LastName,
 		user.IsAdmin,
 		time.Now(),
 	).Scan(&user.ID, &user.CreatedAt)
 }
 
 func (r *UserRepo) GetUser(ctx context.Context, telegramID int64) (*domain.User, error) {
-	query := `SELECT id, telegram_id, username, first_name, is_admin, created_at
+	query := `SELECT id, telegram_id, username, first_name, last_name, is_admin, created_at
 		FROM users
 		WHERE telegram_id = $1`
 
