@@ -8,6 +8,7 @@ import (
 
 type Handler struct {
 	Registration *usecase.Registration
+	Subscription *usecase.Subscription
 	log *logger.Logger
 	Bot *tele.Bot
 }

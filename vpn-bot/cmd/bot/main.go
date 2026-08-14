@@ -35,7 +35,7 @@ func main() {
 
 	registration := usecase.NewRegistration(userRepo)
 	subscription := usecase.NewSubscription(subRepo, userRepo)
-	bot, err := telegram.NewBot(cfg, log, registration, state)
+	bot, err := telegram.NewBot(cfg, log, registration, stateRepo, subscription)
 	if err != nil {
 		log.Fatal("failed to create bot: %w", zap.Error(err))
 	}
