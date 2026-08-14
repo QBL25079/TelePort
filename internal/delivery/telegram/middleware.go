@@ -3,8 +3,8 @@ package telegram
 import (
 	"time"
 
-	"github.com/QBL25079/TelePort/vpn-bot/internal/config"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/lib/logger"
+	"github.com/QBL25079/TelePort/internal/config"
+	"github.com/QBL25079/TelePort/internal/lib/logger"
 	"go.uber.org/zap"
 	tele "gopkg.in/telebot.v4"
 )

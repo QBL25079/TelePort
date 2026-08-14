@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/QBL25079/TelePort/vpn-bot/internal/domain"
+	"github.com/QBL25079/TelePort/internal/domain"
 )
 
 var planDays = map[string]int{

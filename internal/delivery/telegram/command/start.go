@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/QBL25079/TelePort/vpn-bot/internal/delivery/telegram/view"
+	"github.com/QBL25079/TelePort/internal/delivery/telegram/view"
 	"go.uber.org/zap"
 	tele "gopkg.in/telebot.v4"
 )
