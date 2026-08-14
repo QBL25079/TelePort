@@ -1,8 +1,8 @@
 package command
 
 import (
-	"github.com/QBL25079/TelePort/vpn-bot/internal/lib/logger"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/usecase"
+	"github.com/QBL25079/TelePort/internal/lib/logger"
+	"github.com/QBL25079/TelePort/internal/usecase"
 	tele "gopkg.in/telebot.v4"
 )
 

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/QBL25079/TelePort/vpn-bot/internal/domain"
+	"github.com/QBL25079/TelePort/internal/domain"
 	"github.com/jackc/pgx"
 	"github.com/jackc/pgx/v5/pgxpool"
 )

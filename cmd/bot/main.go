@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 
-	"github.com/QBL25079/TelePort/vpn-bot/internal/config"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/delivery/telegram"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/lib/logger"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/repository/postgres"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/usecase"
+	"github.com/QBL25079/TelePort/internal/config"
+	"github.com/QBL25079/TelePort/internal/delivery/telegram"
+	"github.com/QBL25079/TelePort/internal/lib/logger"
+	"github.com/QBL25079/TelePort/internal/repository/postgres"
+	"github.com/QBL25079/TelePort/internal/usecase"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"go.uber.org/zap"
 )

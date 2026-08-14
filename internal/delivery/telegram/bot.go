@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/QBL25079/TelePort/vpn-bot/internal/config"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/delivery/telegram/callback"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/delivery/telegram/command"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/delivery/telegram/view"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/lib/logger"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/repository/postgres"
-	"github.com/QBL25079/TelePort/vpn-bot/internal/usecase"
+	"github.com/QBL25079/TelePort/internal/config"
+	"github.com/QBL25079/TelePort/internal/delivery/telegram/callback"
+	"github.com/QBL25079/TelePort/internal/delivery/telegram/command"
+	"github.com/QBL25079/TelePort/internal/delivery/telegram/view"
+	"github.com/QBL25079/TelePort/internal/lib/logger"
+	"github.com/QBL25079/TelePort/internal/repository/postgres"
+	"github.com/QBL25079/TelePort/internal/usecase"
 	tele "gopkg.in/telebot.v4"
 )
 

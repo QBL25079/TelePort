@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/QBL25079/TelePort/vpn-bot/internal/domain"
+	"github.com/QBL25079/TelePort/internal/domain"
 )
 
 type Registration struct {
