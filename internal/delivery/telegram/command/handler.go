@@ -13,7 +13,7 @@ type Handler struct {
 	Bot *tele.Bot
 }
 
-func NewHandler(reg *usecase.Registration, log *logger.Logger, bot *tele.Bot) *Handler {
-	return &Handler{Registration: reg, log: log, Bot: bot}
+func NewHandler(reg *usecase.Registration, sub *usecase.Subscription, log *logger.Logger, bot *tele.Bot) *Handler {
+	return &Handler{Registration: reg, Subscription: sub, log: log, Bot: bot}
 }
 

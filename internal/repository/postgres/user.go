@@ -46,6 +46,7 @@ func (r *UserRepo) GetUser(ctx context.Context, telegramID int64) (*domain.User,
 		&user.TelegramID,
 		&user.UserName,
 		&user.FirstName,
+		&user.LastName,
 		&user.IsAdmin,
 		&user.CreatedAt,
 	)
