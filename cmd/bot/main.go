@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/QBL25079/TelePort/internal/config"
 	"github.com/QBL25079/TelePort/internal/delivery/telegram"
@@ -37,8 +40,16 @@ func main() {
 	subscription := usecase.NewSubscription(subRepo, userRepo)
 	bot, err := telegram.NewBot(cfg, log, registration, stateRepo, subscription)
 	if err != nil {
-		log.Fatal("failed to create bot: %w", zap.Error(err))
+		log.Fatal("failed to create bot", zap.Error(err))
 	}
 	bot.Setup()
 
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	go bot.Start() 
+
+	log.Info("bot is running...")
+	<-ctx.Done()
+	bot.Stop()
 }

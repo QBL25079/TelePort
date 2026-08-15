@@ -13,7 +13,7 @@ var planDays = map[string]int{
 }
 
 type Subscription struct {
-	subs domain.SubscriptionRepository
+	subs  domain.SubscriptionRepository
 	users domain.UserRepository
 }
 
@@ -26,7 +26,9 @@ func (s *Subscription) ActivateFromState(ctx context.Context, telegramID int64, 
 	if err != nil {
 		return nil, fmt.Errorf("User with this telegram id not found: %w", err)
 	}
-
+	if user == nil {
+		return nil, fmt.Errorf("user not found")
+	}
 
 	days, ok := planDays[planID]
 	if !ok {
@@ -41,7 +43,7 @@ func (s *Subscription) ActivateFromState(ctx context.Context, telegramID int64, 
 		HappLink:    "", // потом Gate
 		StartsAt:    now,
 		ExpiresAt:   now.AddDate(0, 0, days),
-		LocationIDs: locations,}
+		LocationIDs: locations}
 
 	if err := s.subs.Create(ctx, sub); err != nil {
 		return nil, fmt.Errorf("create subscription: %w", err)
