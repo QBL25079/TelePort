@@ -22,6 +22,7 @@ type Bot struct {
 	registration *usecase.Registration
 	state        *postgres.StateRepo
 	sub          *usecase.Subscription
+	payment      *usecase.Payment
 	// usecases
 }
 
@@ -52,8 +53,8 @@ func (b *Bot) Setup() {
 	b.bot.Use(Logger(b.log))
 	b.bot.Use(Recover(b.log))
 
-	cmd := command.NewHandler(b.registration, b.sub, b.log, b.bot)
-	cb := callback.NewHandler(b.state, b.sub, b.log, b.bot)
+	cmd := command.NewHandler(b.registration, b.sub, b.payment, b.log, b.bot)
+	cb := callback.NewHandler(b.state, b.sub, b.payment, b.log, b.bot)
 
 	b.bot.Handle("/start", cmd.Start)
 	b.bot.Handle("/admin", AdminOnly(b.cfg)(cmd.Admin))
@@ -63,7 +64,7 @@ func (b *Bot) Setup() {
 		case "🛒 Купить подписку":
 			return c.Send("Выберите срок подписки:", view.PlansKeyboard())
 		case "📁 Моя подписка":
-    		return cmd.MySubscription(c)
+			return cmd.MySubscription(c)
 		case "💬 Поддержка":
 			return c.Send("По вопросам: @support")
 		default:
@@ -78,6 +79,7 @@ func (b *Bot) Setup() {
 	b.bot.Handle(&tele.Btn{Unique: "back_plans"}, cb.BackToPlans)
 	b.bot.Handle(&tele.Btn{Unique: "back_locs"}, cb.BackToLocations)
 	b.bot.Handle(&tele.Btn{Unique: "back_main"}, cmd.Start)
+	b.bot.Handle("/confirm_payment", AdminOnly(b.cfg)(cmd.ConfirmPayment))
 }
 
 func (b *Bot) Start() {

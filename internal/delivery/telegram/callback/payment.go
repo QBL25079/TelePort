@@ -13,28 +13,24 @@ func (h *Handler) Pay(c tele.Context) error {
 	ctx := context.Background()
 
 	state, err := h.State.Get(ctx, c.Sender().ID)
-	if err != nil {
+	if err != nil || state == nil {
 		return c.Edit("Сессия покупки истекла. Начни с «Купить подписку».")
 	}
 
-	sub, err := h.Subscription.ActivateFromState(
-		ctx, 
-		c.Sender().ID,
-		state.PlanID,
-		state.Locations,
-	)
+	p, err := h.Payment.CreatePending(ctx, c.Sender().ID, state.PlanID, state.Locations)
 	if err != nil {
-		h.Log.Error("activate subscription", zap.Error(err))
-		return c.Edit("Не удалось активировать подписку. Попробуй позже.")
+		h.Log.Error("create payment", zap.Error(err))
+		return c.Edit("Не удалось создать счёт. Попробуй позже.")
 	}
 
 	_ = h.State.Clear(ctx, c.Sender().ID)
 
 	text := fmt.Sprintf(
-		"✅ Подписка активна!\n\nТариф: %s\nДо: %s\nСтраны: %s\n\nСсылка для Happ появится после подключения панели.",
-		sub.PlanID,
-		sub.ExpiresAt.Format("02.01.2006"),
-		strings.Join(sub.LocationIDs, ", "),
+		"Счёт <b>#%d</b> создан.\n\nТариф: %s\nСумма: %d ₽\nСтраны: %s\n\n"+
+			"Статус: <b>ожидает оплаты</b>\n\n"+
+			"Сейчас оплата вручную: напиши в поддержку и укажи номер счёта.\n"+
+			"После подтверждения подписка активируется.",
+		p.ID, p.PlanID, p.Amount, strings.Join(p.Locations, ", "),
 	)
 	return c.Edit(text)
 }

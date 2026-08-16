@@ -9,11 +9,12 @@ import (
 type Handler struct {
 	Registration *usecase.Registration
 	Subscription *usecase.Subscription
+	Payment *usecase.Payment
 	log *logger.Logger
 	Bot *tele.Bot
 }
 
-func NewHandler(reg *usecase.Registration, sub *usecase.Subscription, log *logger.Logger, bot *tele.Bot) *Handler {
-	return &Handler{Registration: reg, Subscription: sub, log: log, Bot: bot}
+func NewHandler(reg *usecase.Registration, sub *usecase.Subscription, payment *usecase.Payment, log *logger.Logger, bot *tele.Bot) *Handler {
+	return &Handler{Registration: reg, Subscription: sub, Payment: payment, log: log, Bot: bot}
 }
 

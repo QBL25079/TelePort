@@ -59,3 +59,28 @@ func (s *Subscription) GetActive(ctx context.Context, telegramID int64) (*domain
 
 	return s.subs.GetActiveByUserID(ctx, user.ID)
 }
+
+func (s *Subscription) ActivateForUser(ctx context.Context, userID int64, planID string, locations []string) (*domain.Subscription, error) {
+	days, ok := planDays[planID]
+	if !ok {
+		return nil, fmt.Errorf("unknown plan: %s", planID)
+	}
+
+	now := time.Now()
+
+	sub := &domain.Subscription{
+		UserID:      userID,
+		PlanID:      planID,
+		Status:      domain.StatusActive,
+		HappLink:    "",
+		StartsAt:    now,
+		ExpiresAt:   now.AddDate(0, 0, days),
+		LocationIDs: locations,
+	}
+
+	if err := s.subs.Create(ctx, sub); err != nil {
+		return nil, err
+	}
+
+	return sub, nil
+}
