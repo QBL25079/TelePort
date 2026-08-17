@@ -26,7 +26,7 @@ type Bot struct {
 	// usecases
 }
 
-func NewBot(cfg *config.Config, log *logger.Logger, registration *usecase.Registration, state *postgres.StateRepo, sub *usecase.Subscription) (*Bot, error) {
+func NewBot(cfg *config.Config, log *logger.Logger, registration *usecase.Registration, state *postgres.StateRepo, sub *usecase.Subscription, payment *usecase.Payment) (*Bot, error) {
 	pref := tele.Settings{
 		Token:     cfg.Bot.Token,
 		Poller:    &tele.LongPoller{Timeout: 10 * time.Second},

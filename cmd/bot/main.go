@@ -35,10 +35,12 @@ func main() {
 	userRepo := postgres.NewUserRepo(db)
 	subRepo := postgres.NewSubscriptions(db)
 	stateRepo := postgres.NewStateRepo(db)
+	paymentRepo := postgres.NewPaymentRepo(db)
 
 	registration := usecase.NewRegistration(userRepo)
 	subscription := usecase.NewSubscription(subRepo, userRepo)
-	bot, err := telegram.NewBot(cfg, log, registration, stateRepo, subscription)
+	payment := usecase.NewPayment(paymentRepo, userRepo, subscription)
+	bot, err := telegram.NewBot(cfg, log, registration, stateRepo, subscription, payment)
 	if err != nil {
 		log.Fatal("failed to create bot", zap.Error(err))
 	}
@@ -47,7 +49,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	go bot.Start() 
+	go bot.Start()
 
 	log.Info("bot is running...")
 	<-ctx.Done()

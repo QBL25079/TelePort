@@ -29,7 +29,7 @@ func (r *PaymentRepo) Create(ctx context.Context, p *domain.Payment) error {
 	).Scan(&p.ID, &p.CreatedAt)
 }
 
-func (r *PaymentRepo) GetByID(ctx context.Context, id int64) (domain.Payment, error) {
+func (r *PaymentRepo) GetByID(ctx context.Context, id int64) (*domain.Payment, error) {
 	var payment domain.Payment
 	var paidAt *time.Time
 
@@ -41,13 +41,13 @@ func (r *PaymentRepo) GetByID(ctx context.Context, id int64) (domain.Payment, er
 
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
-			return domain.Payment{}, fmt.Errorf("No payments with this ID: %w", err)
+			return nil, fmt.Errorf("No payments with this ID: %w", err)
 		}
-		return domain.Payment{}, err
+		return nil, err
 	}
 
 	payment.PaidAt = paidAt
-	return payment, nil
+	return &payment, nil
 }
 
 func (r *PaymentRepo) MarkSuccess(ctx context.Context, id int64) error {
@@ -64,4 +64,39 @@ func (r *PaymentRepo) MarkSuccess(ctx context.Context, id int64) error {
 		return errors.New("payment not pending or not found")
 	}
 	return nil
+}
+
+func (r *PaymentRepo) GetPendingByUserID(ctx context.Context, userID int64) (*domain.Payment, error) {
+	var p domain.Payment
+	var paidAt *time.Time
+
+	err := r.db.QueryRow(ctx, `
+		SELECT id, user_id, plan_id, amount, currency, status,
+		       COALESCE(external_id, ''), locations, created_at, paid_at
+		FROM payments
+		WHERE user_id = $1 AND status = 'pending'
+		ORDER BY created_at DESC
+		LIMIT 1
+	`, userID).Scan(
+		&p.ID,
+		&p.UserID,
+		&p.PlanID,
+		&p.Amount,
+		&p.Currency,
+		&p.Status,
+		&p.ExternalID,
+		&p.Locations,
+		&p.CreatedAt,
+		&paidAt,
+	)
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, nil // нет pending — это нормально
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	p.PaidAt = paidAt
+	return &p, nil
 }
