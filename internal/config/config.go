@@ -17,6 +17,12 @@ type Bot struct {
 	Token string `yaml:"token" env-required:"true"`
 }
 
+type Marzban struct {
+	BaseURL string `yaml:"base_url"`
+	Token   string `yaml:"token"`
+	Enabled bool   `yaml:"enabled" env-default:"false"`
+}
+
 type Postgres struct {
 	Host     string `yaml:"host" env-required:"true"`
 	Port     string `yaml:"port" env-required:"true"`

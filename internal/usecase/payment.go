@@ -22,6 +22,7 @@ func NewPayment(payment domain.PaymentRepository, users domain.UserRepository, s
 }
 
 func (p *Payment) CreatePending(ctx context.Context, telegramID int64, planID string, locations []string) (*domain.Payment, error) {
+	
 	user, err := p.users.GetUser(ctx, telegramID)
 	if err != nil || user == nil {
 		return nil, fmt.Errorf("User with this telegram id not found: %w", err)
@@ -34,6 +35,13 @@ func (p *Payment) CreatePending(ctx context.Context, telegramID int64, planID st
 
 	if len(locations) == 0 {
 		return nil, fmt.Errorf("no locations")
+	}
+	existing, err := p.payment.GetPendingByUserID(ctx, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	if existing != nil {
+		return existing, nil // или ошибка: «у тебя уже есть неоплаченный счёт #...»
 	}
 
 	pay := &domain.Payment{
