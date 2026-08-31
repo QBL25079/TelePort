@@ -19,9 +19,10 @@ func NewUserRepo(db *pgxpool.Pool) *UserRepo {
 	return &UserRepo{db: db}
 }
 
-func (r *UserRepo) Create(ctx context.Context, user *domain.User) error{
-	query := `INSERT INTO users (telegram_id, username, first_name, last_name is_admin, created_at)
-		VALUES ($1, $2, $3, $4, $5)
+func (r *UserRepo) Create(ctx context.Context, user *domain.User) error {
+	query := `
+		INSERT INTO users (telegram_id, username, first_name, last_name, is_admin, created_at)
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING id, created_at`
 
 	return r.db.QueryRow(ctx, query,

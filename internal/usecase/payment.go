@@ -41,7 +41,7 @@ func (p *Payment) CreatePending(ctx context.Context, telegramID int64, planID st
 		return nil, err
 	}
 	if existing != nil {
-		return existing, nil // или ошибка: «у тебя уже есть неоплаченный счёт #...»
+		return existing, nil 
 	}
 
 	pay := &domain.Payment{
@@ -62,7 +62,7 @@ func (p *Payment) CreatePending(ctx context.Context, telegramID int64, planID st
 
 func (p *Payment) Confirm(ctx context.Context, paymentID int64) (*domain.Subscription, error) {
 	pay, err := p.payment.GetByID(ctx, paymentID)
-	if err != nil || p == nil {
+	if err != nil || pay == nil {
 		return nil, fmt.Errorf("payment not found")
 	}
 
@@ -70,9 +70,14 @@ func (p *Payment) Confirm(ctx context.Context, paymentID int64) (*domain.Subscri
 		return nil, fmt.Errorf("payment status is %s", pay.Status)
 	}
 
+	user, err := p.users.GetUser(ctx, pay.UserID) 
+	if err != nil || user == nil {
+		return nil, fmt.Errorf("user not found")
+	}
+
 	if err := p.payment.MarkSuccess(ctx, paymentID); err != nil {
 		return nil, err
 	}
 
-	return p.subs.ActivateForUser(ctx, pay.UserID, pay.PlanID, pay.Locations)
+	return p.subs.ActivateForUser(ctx, pay.UserID, user.TelegramID, pay.PlanID, pay.Locations)
 }

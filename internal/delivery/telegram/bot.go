@@ -46,6 +46,7 @@ func NewBot(cfg *config.Config, log *logger.Logger, registration *usecase.Regist
 		registration: registration,
 		state:        state,
 		sub:          sub,
+		payment: payment,
 	}, nil
 }
 

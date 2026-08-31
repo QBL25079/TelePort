@@ -6,12 +6,12 @@ import (
 )
 
 type GateWay struct {
-	TelegranID int64
+	TelegramID int64
 	UserName   string
 	ExpiresAt  time.Time
 }
 
 type GateClient interface {
 	CreateOrUpdate(ctx context.Context, u GateWay) (string, error)
-	Disable(ctx context.Context, userName string)
+	Disable(ctx context.Context, userName string) error
 }

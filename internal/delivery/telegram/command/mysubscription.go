@@ -23,11 +23,12 @@ func (h *Handler) MySubscription(c tele.Context) error {
 	}
 
 	text := fmt.Sprintf(
-		"📁 Твоя подписка\n\nТариф: %s\nСтатус: %s\nДо: %s\nСтраны: %s",
+		"📁 Твоя подписка\n\nТариф: %s\nСтатус: %s\nДо: %s\nСтраны: %s\n\nСсылка:\n%s",
 		sub.PlanID,
 		sub.Status,
 		sub.ExpiresAt.Format("02.01.2006 15:04"),
 		strings.Join(sub.LocationIDs, ", "),
+		sub.HappLink,
 	)
 	return c.Send(text)
 }

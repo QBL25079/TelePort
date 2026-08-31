@@ -49,10 +49,12 @@ func (r *SubRepo) Create(ctx context.Context, sub *domain.Subscription) error {
 }
 
 func (r *SubRepo) GetActiveByUserID(ctx context.Context, userID int64) (*domain.Subscription, error) {
-	query := `SELECT id, user_id, plan_id, status, COALESCE(happ_link, '') starts_at, expires_at, 
-	created_at FROM subscriptions WHERE user_id = $1 AND status = 'active' AND expires_at > NOW()
-		ORDER BY expires_at DESC
-		LIMIT 1`
+	query := `
+	SELECT id, user_id, plan_id, status, COALESCE(happ_link, ''), starts_at, expires_at, created_at
+	FROM subscriptions
+	WHERE user_id = $1 AND status = 'active' AND expires_at > NOW()
+	ORDER BY expires_at DESC
+	LIMIT 1`
 	var sub domain.Subscription
 	
 	err := r.db.QueryRow(ctx, query, userID).Scan(&sub.ID, &sub.UserID, &sub.PlanID, &sub.Status, &sub.HappLink,

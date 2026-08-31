@@ -31,5 +31,11 @@ func (h *Handler) ConfirmPayment(c tele.Context) error {
 		return c.Send("Ошибка: " + err.Error())
 	}
 
-	return c.Send(fmt.Sprintf("Оплата #%d подтверждена. Подписка до %s", id, sub.ExpiresAt.Format("02.01.2006")))
+	text := fmt.Sprintf(
+		"Оплата #%d подтверждена.\nПодписка до %s\nСсылка: %s",
+		id,
+		sub.ExpiresAt.Format("02.01.2006"),
+		sub.HappLink,
+	)
+	return c.Send(text)
 }
