@@ -36,6 +36,7 @@ type Config struct {
 	Env      string   `yaml:"env" env-required:"true"`
 	Bot      Bot      `yaml:"bot" env-required:"true"`
 	Postgres Postgres `yaml:"postgres" env-required:"true"`
+	Marzban  Marzban  `yaml:"marzban"`
 	AdminIDs []int64  `yaml:"admin_ids"`
 }
 
@@ -55,7 +56,7 @@ func MustLoad() *Config {
 		panic("config file does not exist: " + configPath)
 	}
 
-	var cfg Config 
+	var cfg Config
 	if err := cleanenv.ReadConfig(configPath, &cfg); err != nil {
 		panic("cannot read config: " + err.Error())
 	}
@@ -64,7 +65,7 @@ func MustLoad() *Config {
 }
 
 func (c *Config) IsProd() bool {
-	return c.Env==EnvProduction
+	return c.Env == EnvProduction
 }
 
 func (c *Config) IsAdmin(telegramID int64) bool {

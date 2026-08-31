@@ -5,13 +5,12 @@ import tele "gopkg.in/telebot.v4"
 func MainMenu() *tele.ReplyMarkup {
 	menu := &tele.ReplyMarkup{ResizeKeyboard: true}
 	btnBuy := menu.Text("🛒 Купить подписку")
-	btnMy := menu.Text("🛒 Купить подписку")
-	btnSupport := menu.Text("🛒 Купить подписку")	
+	btnMy := menu.Text("📁 Моя подписка")
+	btnSupport := menu.Text("💬 Поддержка")
 	menu.Reply(
 		menu.Row(btnBuy),
 		menu.Row(btnMy, btnSupport),
 	)
-
 	return menu
 }
 
@@ -28,11 +27,12 @@ func PlansKeyboard() *tele.ReplyMarkup {
 
 func LocationsKeyboard(selected map[string]bool) *tele.ReplyMarkup {
 	menu := &tele.ReplyMarkup{}
-	locs := []struct{ID, name string} {
+	locs := []struct{ ID, name string }{
 		{"nl", "🇳🇱 Нидерланды"},
 		{"de", "🇩🇪 Германия"},
-		{"nw", "nw Норвегия"},
-		{"bg", "bg Бельгия"},
+		{"fi", "🇫🇮 Финляндия"},
+		{"us", "🇺🇸 США"},
+		{"lv", "🇱🇻 Латвия"},
 	}
 
 	var rows []tele.Row
