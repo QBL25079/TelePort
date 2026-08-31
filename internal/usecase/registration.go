@@ -21,12 +21,10 @@ func (uc *Registration) RegisterOrGet(ctx context.Context, telegramID int64, use
 		return nil, fmt.Errorf("get user: %w", err)
 	}
 
-	// Пользователь уже есть
 	if user != nil {
 		return user, nil
 	}
 
-	// Создаём нового
 	user = &domain.User{
 		TelegramID: telegramID,
 		UserName:   username,

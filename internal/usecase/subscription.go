@@ -40,7 +40,7 @@ func (s *Subscription) ActivateFromState(ctx context.Context, telegramID int64, 
 		UserID:      user.ID,
 		PlanID:      planID,
 		Status:      domain.StatusActive,
-		HappLink:    "", // потом Gate
+		HappLink:    "",
 		StartsAt:    now,
 		ExpiresAt:   now.AddDate(0, 0, days),
 		LocationIDs: locations}

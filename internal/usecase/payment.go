@@ -41,7 +41,7 @@ func (p *Payment) CreatePending(ctx context.Context, telegramID int64, planID st
 		return nil, err
 	}
 	if existing != nil {
-		return existing, nil // или ошибка: «у тебя уже есть неоплаченный счёт #...»
+		return existing, nil 
 	}
 
 	pay := &domain.Payment{

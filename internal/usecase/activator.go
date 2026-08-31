@@ -23,7 +23,7 @@ func (a *Activator) ActivateForUser(ctx context.Context, userID int64, telegramI
 	now := time.Now()
 	exp := now.AddDate(0, 0, days)
 
-	link, err := a.gate.CreateOrUpdate(ctx, domain.GateWay{TelegranID: telegramID,
+	link, err := a.gate.CreateOrUpdate(ctx, domain.GateWay{TelegramID: telegramID,
 		UserName:  fmt.Sprintf("tg_%d", telegramID),
 		ExpiresAt: exp})
 
